@@ -1,8 +1,8 @@
 # Kernel and Firmware version to use when building Phonebo.Cx Kernel
 KVERS=6.6.25
-KMAJOR=$(word 1,$(subst., ,$(KVERS)))
-KMINOR=$(word 2,$(subst., ,$(KVERS)))
-KREV=$(word 3,$(subst., ,$(KVERS)))
+KMAJOR=$(word 1,$(subst ., ,$(KVERS)))
+KMINOR=$(word 2,$(subst ., ,$(KVERS)))
+KREV=$(word 3,$(subst ., ,$(KVERS)))
 VERS=1
 KFIRMWARE=20240610
 
