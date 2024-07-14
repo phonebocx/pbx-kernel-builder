@@ -1,14 +1,18 @@
-# Kernel and Firmware version to use when building Phonebo.Cx Kernel
-KVERS=6.6.25
-KMAJOR=$(word 1,$(subst ., ,$(KVERS)))
-KMINOR=$(word 2,$(subst ., ,$(KVERS)))
-KREV=$(word 3,$(subst ., ,$(KVERS)))
-VERS=1
-KFIRMWARE=20240610
+# Kernel and Firmware version to use when building Phonebo.Cx Kernel. This
+# should be provided by the isobuild Makefile, but defaults are here for
+# testing
+KERNELVER ?= 6.6.25
+KERNELREL ?= 1
+KFIRMWARE ?= 20240610
+KMAJOR=$(word 1,$(subst ., ,$(KERNELVER)))
+KMINOR=$(word 2,$(subst ., ,$(KERNELVER)))
+KREV=$(word 3,$(subst ., ,$(KERNELVER)))
 
-ORIG=src/linux-$(KVERS).tar.xz
+BUILDER="Honest Rob <xrobau@gmail.com>"
+
+ORIG=src/linux-$(KERNELVER).tar.xz
 FORIG=src/linux-firmware-$(KFIRMWARE).tar.gz
-DEST=kernel/linux-$(KVERS)
+DEST=kernel/linux-$(KERNELVER)
 FDEST=kernel/linux-firmware-$(KFIRMWARE)
 DIR=$(shell pwd)
 SHELL=/bin/bash
@@ -18,7 +22,7 @@ export KERNELREV DEST DIR
 DPKG_FLAGS=-Zgzip
 export DPKG_FLAGS
 
-DESTDEB=kernel/linux-image-$(KVERS)-$(VERS)_$(KVERS)-$(VERS)_amd64.deb
+DESTDEB=kernel/linux-image-$(KERNELVER)-$(KERNELREL)_$(KERNELVER)-$(KERNELREL)_amd64.deb
 # PhoneBo.cx git repo, sgm branch.
 DAHDI_SRC=src/dahdi-linux
 
@@ -53,7 +57,7 @@ modules:
 	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" $@
 
 $(DESTDEB): setup
-	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALVERSION="-$(VERS)" KDEB_PKGVERSION="$(KVERS)-$(VERS)" EMAIL="Rob Thomas <xrobau@gmail.com>" DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
+	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALKERNELRELION="-$(KERNELREL)" KDEB_PKGKERNELRELION="$(KERNELVER)-$(KERNELREL)" EMAIL=$(BUILDER) DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
 
 SCONFIG=configs/defconfig-$(KMAJOR)
 
