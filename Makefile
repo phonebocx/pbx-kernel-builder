@@ -57,7 +57,7 @@ modules:
 	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" $@
 
 $(DESTDEB): setup
-	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALKERNELRELION="-$(KERNELREL)" KDEB_PKGKERNELRELION="$(KERNELVER)-$(KERNELREL)" EMAIL=$(BUILDER) DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
+	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALVERSION="-$(KERNELREL)" KDEB_PKGVERSION="$(KERNELVER)-$(KERNELREL)" EMAIL=$(BUILDER) DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
 
 SCONFIG=configs/defconfig-$(KMAJOR)
 
