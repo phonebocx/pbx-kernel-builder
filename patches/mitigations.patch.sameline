@@ -1,0 +1,11 @@
+--- kernel/cpu.c.orig	2024-07-15 07:38:08.462834424 +1000
++++ kernel/cpu.c	2024-07-15 07:38:17.446913861 +1000
+@@ -3211,7 +3211,7 @@
+ 	CPU_MITIGATIONS_AUTO_NOSMT,
+ };
+ 
+-static enum cpu_mitigations cpu_mitigations __ro_after_init = CPU_MITIGATIONS_AUTO;
++static enum cpu_mitigations cpu_mitigations __ro_after_init = CPU_MITIGATIONS_OFF;
+ 
+ static int __init mitigations_parse_cmdline(char *arg)
+ {
