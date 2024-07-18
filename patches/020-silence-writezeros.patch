@@ -1,0 +1,17 @@
+--- drivers/block/loop.c.orig	2024-07-18 15:21:27.647576266 +1000
++++ drivers/block/loop.c	2024-07-18 15:21:35.003652955 +1000
+@@ -320,6 +320,14 @@
+ 		return -EOPNOTSUPP;
+ 
+ 	ret = file->f_op->fallocate(file, mode, pos, blk_rq_bytes(rq));
++	/*
++	 * Some filesystems have the fallocate method, but lack the capability
++	 * to do FALLOC_FL_ZERO_RANGE and/or FALLOC_FL_PUNCH_HOLE requests.
++	 * We do not want a syslog warning in this case.
++	 */
++	if (ret == -EOPNOTSUPP)
++		rq->rq_flags |= RQF_QUIET;
++
+ 	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
+ 		return -EIO;
+ 	return ret;
