@@ -1,0 +1,15 @@
+--- drivers/net/usb/r8152.c.orig	2024-07-31 11:40:16.688702838 +1000
++++ drivers/net/usb/r8152.c	2024-07-31 11:40:20.952745868 +1000
+@@ -7024,6 +7024,12 @@
+ 		ocp_write_word(tp, MCU_TYPE_PLA, PLA_LED_FEATURE, ocp_data);
+ 	}
+ 
++        // Fix R8152 Left LED not blinking bug on blue boxes
++	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_LEDSEL);
++	ocp_data &= 0xff00;
++	ocp_data |= 0x0038;   // ocp_data |= 0x0038;
++	ocp_write_word(tp, MCU_TYPE_PLA, PLA_LEDSEL, ocp_data);
++
+ 	r8152_power_cut_en(tp, false);
+ 
+ 	ocp_data = ocp_read_word(tp, MCU_TYPE_PLA, PLA_PHY_PWR);
