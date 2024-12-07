@@ -1,7 +1,7 @@
 # Kernel and Firmware version to use when building Phonebo.Cx Kernel. This
 # should be provided by the isobuild Makefile, but defaults are here for
 # testing
-KERNELVER ?= 6.6.39
+KERNELVER ?= 6.6.63
 KERNELREL ?= 1
 KFIRMWARE ?= 20240610
 KMAJOR=$(word 1,$(subst ., ,$(KERNELVER)))
