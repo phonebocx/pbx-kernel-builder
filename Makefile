@@ -1,12 +1,16 @@
 # Kernel and Firmware version to use when building Phonebo.Cx Kernel. This
 # should be provided by the isobuild Makefile, but defaults are here for
 # testing
-KERNELVER ?= 6.6.63
+KERNELVER ?= 6.6.83
 KERNELREL ?= 1
 KFIRMWARE ?= 20240610
 KMAJOR=$(word 1,$(subst ., ,$(KERNELVER)))
 KMINOR=$(word 2,$(subst ., ,$(KERNELVER)))
 KREV=$(word 3,$(subst ., ,$(KERNELVER)))
+
+# This currently be 'atom' or 'generic'
+CPUTYPE ?= atom
+SCONFIG=configs/$(CPUTYPE)config-$(KMAJOR)
 
 BUILDER="Honest Rob <xrobau@gmail.com>"
 
@@ -59,7 +63,6 @@ modules:
 $(DESTDEB): setup
 	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALVERSION="-$(KERNELREL)" KDEB_PKGVERSION="$(KERNELVER)-$(KERNELREL)" EMAIL=$(BUILDER) DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
 
-SCONFIG=configs/defconfig-$(KMAJOR)
 
 $(DEST)/.config: $(DEST)/Makefile sgm-dahdi $(DEST)/arch/x86/configs/pbx_defconfig patch
 	cd $(DEST) && make pbx_defconfig
