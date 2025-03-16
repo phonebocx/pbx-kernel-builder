@@ -11,6 +11,7 @@ KREV=$(word 3,$(subst ., ,$(KERNELVER)))
 # This currently be 'atom' or 'generic'
 CPUTYPE ?= atom
 SCONFIG=configs/$(CPUTYPE)config-$(KMAJOR)
+CONFIGNAME=pbx_$(CPUTYPE)config
 
 BUILDER="Honest Rob <xrobau@gmail.com>"
 
@@ -64,11 +65,16 @@ $(DESTDEB): setup
 	cd $(DEST) && make -j$(shell nproc) CC="ccache gcc" LOCALVERSION="-$(KERNELREL)" KDEB_PKGVERSION="$(KERNELVER)-$(KERNELREL)" EMAIL=$(BUILDER) DPKG_FLAGS=$(DPKG_FLAGS) bindeb-pkg
 
 
-$(DEST)/.config: $(DEST)/Makefile sgm-dahdi $(DEST)/arch/x86/configs/pbx_defconfig patch
-	cd $(DEST) && make pbx_defconfig
+$(DEST)/.config: $(DEST)/Makefile $(DEST)/arch/x86/configs/$(CONFIGNAME) sgm-dahdi patch
+	cd $(DEST) && make $(CONFIGNAME)
 	touch $(DEST)/.config
 
-$(DEST)/arch/x86/configs/pbx_defconfig: $(SCONFIG)
+# CONFIGNAME is generated from pbx_$(CPUTYPE)config. This makes sure
+# tries to make sure that it's rebuilt correctly when changed.
+#
+# If not, uncomment the next line
+#.PHONY: $(DEST)/arch/x86/configs/$(CONFIGNAME)
+$(DEST)/arch/x86/configs/$(CONFIGNAME): $(SCONFIG)
 	cp -p $< $@
 
 $(DEST)/Makefile: $(ORIG)
@@ -78,7 +84,7 @@ $(DEST)/Makefile: $(ORIG)
 
 patch: $(DEST)/.patched
 
-$(DEST)/.patched: $(DEST)/.config
+$(DEST)/.patched:
 	@cd $(DEST); \
 	for x in $(wildcard $(DIR)/patches/*.patch); do \
 		echo Applying patch $$(basename $$x); \
