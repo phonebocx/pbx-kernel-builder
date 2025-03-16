@@ -9,9 +9,9 @@ KMINOR=$(word 2,$(subst ., ,$(KERNELVER)))
 KREV=$(word 3,$(subst ., ,$(KERNELVER)))
 
 # This currently be 'atom' or 'generic'
-CPUTYPE ?= atom
-SCONFIG=configs/$(CPUTYPE)config-$(KMAJOR)
-CONFIGNAME=pbx_$(CPUTYPE)config
+BUILDCPUTYPE ?= generic
+SCONFIG=configs/$(BUILDCPUTYPE)config-$(KMAJOR)
+CONFIGNAME=pbx_defconfig
 
 BUILDER="Honest Rob <xrobau@gmail.com>"
 
@@ -69,10 +69,9 @@ $(DEST)/.config: $(DEST)/Makefile $(DEST)/arch/x86/configs/$(CONFIGNAME) sgm-dah
 	cd $(DEST) && make $(CONFIGNAME)
 	touch $(DEST)/.config
 
-# CONFIGNAME is generated from pbx_$(CPUTYPE)config. This makes sure
-# tries to make sure that it's rebuilt correctly when changed.
+# CONFIGNAME is set as pbx_defconfig, and uses $(SCONFIG) as
+# a prereq. If it's not updateing, uncomment the next line.
 #
-# If not, uncomment the next line
 #.PHONY: $(DEST)/arch/x86/configs/$(CONFIGNAME)
 $(DEST)/arch/x86/configs/$(CONFIGNAME): $(SCONFIG)
 	cp -p $< $@
