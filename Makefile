@@ -9,7 +9,7 @@ KMINOR=$(word 2,$(subst ., ,$(KERNELVER)))
 KREV=$(word 3,$(subst ., ,$(KERNELVER)))
 
 # This currently be 'atom' or 'generic'
-BUILDCPUTYPE ?= generic
+BUILDCPUTYPE ?= atom
 SCONFIG=configs/$(BUILDCPUTYPE)config-$(KMAJOR)
 CONFIGNAME=pbx_defconfig
 
